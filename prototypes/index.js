@@ -21,27 +21,34 @@ const { dinosaurs, humans, movies } = require('./datasets/dinosaurs');
 
 // DATASET: kitties from ./datasets/kitties
 const kittyPrompts = {
-  orangeKittyNames() {
 
+  orangeKittyNames() {
     // Return an array of just the names of kitties who are orange e.g.
     // ['Tiger', 'Snickers']
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let orangeCats = [];
 
+    let orangeSort = kitties.filter(kitty => {
+      if (kitty.color === 'orange') {
+        orangeCats.push(kitty.name);
+      }
+    });
+
+    return orangeCats;
     // Annotation:
-    // Write your annotation here as a comment
+    // Use filter to access ALL of the orange kitties in the array, push just the name into a new array, return new array
   },
-
+  //
   sortByAge() {
     // Sort the kitties by their age
+    let kittyAge = kitties.sort((a, b) => {
+      return b.age - a.age;
+    });
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
-
+    return kittyAge;
     // Annotation:
-    // Write your annotation here as a comment
+    // Use sort to just sort the kitty's ages, with a and b representing any two kitties. When subtracting the age of kitty a from age of kitty b, sort puts cats in order based on the value that is returned. b-a is used for descending order, a-b would be ascending order.
   },
-
+  //
   growUp() {
     // Return an array of kitties who have all grown up by 2 years e.g.
     // [{
@@ -56,8 +63,12 @@ const kittyPrompts = {
     // },
     // ...etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let grownUp = kitties.forEach(kitty => {
+      return kitty.age += 2;
+    });
+
+    return kitties;
+      // Annotation: forEach acts similar to a for loop and is useful when you want to do the same thing to each item in an array. In this case, adding 2 to the age of each kitty in the array, then returning the array with the new ages
   }
 };
 
@@ -362,7 +373,7 @@ const nationalParksPrompts = {
     // Annotation:
     // Write your annotation here as a comment
   }
-}
+};
 
 
 
