@@ -68,7 +68,7 @@ const kittyPrompts = {
     });
 
     return kitties;
-      // Annotation: forEach acts similar to a for loop and is useful when you want to do the same thing to each item in an array. In this case, adding 2 to the age of each kitty in the array, then returning the array with the new ages
+    // Annotation: forEach acts similar to a for loop and is useful when you want to do the same thing to each item in an array. In this case, adding 2 to the age of each kitty in the array, then returning the array with the new ages
   }
 };
 
@@ -99,11 +99,22 @@ const clubPrompts = {
     //   ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let clubInfo = {};
 
+    clubs.forEach(club => {
+      club.members.forEach(member => {
+        if (clubInfo[member]) {
+          clubInfo[member].push(club.club);
+        } else {
+          clubInfo[member] = [club.club];
+        }
+      });
+    });
+
+    // const result = 'REPLACE WITH YOUR RESULT HERE';
+    return clubInfo;
     // Annotation:
-    // Write your annotation here as a comment
+    // Use nested forEach to go through each club and then the members that are in each club. Create an empty object called clubInfo. If clubInfo has a key with the members name already, push the club name that person is a member of into array. If the key does not exist, set a new key and assign it to an array with the club name as its first value
   }
 };
 
