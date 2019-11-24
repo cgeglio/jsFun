@@ -150,15 +150,15 @@ const modPrompts = {
       let newMod = {};
       newMod.mod = mod.mod;
       newMod.studentsPerInstructor = mod.students / mod.instructors;
-      breakdown.push(newMod)
-    })
+      breakdown.push(newMod);
+    });
 
     return breakdown;
   }
-}
+};
 
-    // Annotation:
-    // Tried using reduce here at first but ended up switching to forEach. Using forEach to go through each mod and pull data from that mod to create a new object. Then pushing that new object into an array and returning the array.
+// Annotation:
+// Tried using reduce here at first but ended up switching to forEach. Using forEach to go through each mod and pull data from that mod to create a new object. Then pushing that new object into an array and returning the array.
 //   }
 // };
 
