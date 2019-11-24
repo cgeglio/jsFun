@@ -111,7 +111,6 @@ const clubPrompts = {
       });
     });
 
-    // const result = 'REPLACE WITH YOUR RESULT HERE';
     return clubInfo;
     // Annotation:
     // Use nested forEach to go through each club and then the members that are in each club. Create an empty object called clubInfo. If clubInfo has a key with the members name already, push the club name that person is a member of into array. If the key does not exist, set a new key and assign it to an array with the club name as its first value
@@ -136,23 +135,32 @@ const clubPrompts = {
 
 // DATASET: mods from ./datasets/mods
 const modPrompts = {
-  studentsPerMod() {
-    // Return an array of objects where the keys are mod (the number of the module)
-    // and studentsPerInstructor (how many students per instructor there are for that mod) e.g.
-    // [
-    //   { mod: 1, studentsPerInstructor: 9 },
-    //   { mod: 2, studentsPerInstructor: 11 },
-    //   { mod: 3, studentsPerInstructor: 10 },
-    //   { mod: 4, studentsPerInstructor: 8 }
-    // ]
+  // Return an array of objects where the keys are mod (the number of the module)
+  // and studentsPerInstructor (how many students per instructor there are for that mod) e.g.
+  // [
+  //   { mod: 1, studentsPerInstructor: 9 },
+  //   { mod: 2, studentsPerInstructor: 11 },
+  //   { mod: 3, studentsPerInstructor: 10 },
+  //   { mod: 4, studentsPerInstructor: 8 }
+  // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+  studentsPerMod() {
+    let breakdown = [];
+    mods.forEach(mod => {
+      let newMod = {};
+      newMod.mod = mod.mod;
+      newMod.studentsPerInstructor = mod.students / mod.instructors;
+      breakdown.push(newMod)
+    })
+
+    return breakdown;
+  }
+}
 
     // Annotation:
-    // Write your annotation here as a comment
-  }
-};
+    // Tried using reduce here at first but ended up switching to forEach. Using forEach to go through each mod and pull data from that mod to create a new object. Then pushing that new object into an array and returning the array.
+//   }
+// };
 
 
 
