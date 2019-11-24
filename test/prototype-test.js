@@ -87,7 +87,7 @@ describe("PROTOTYPES", () => {
         Christie: ['Newspaper', 'FBLA']
       })
     })
-  }), describe.only("Mod Prompts", () => {
+  }), describe("Mod Prompts", () => {
     it("studentsPerMod", () => {
       const e = modPrompts.studentsPerMod();
       expect(e).to.deep.equal([{

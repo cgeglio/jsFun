@@ -159,9 +159,6 @@ const modPrompts = {
 
 // Annotation:
 // Tried using reduce here at first but ended up switching to forEach. Using forEach to go through each mod and pull data from that mod to create a new object. Then pushing that new object into an array and returning the array.
-//   }
-// };
-
 
 
 
@@ -180,21 +177,27 @@ const modPrompts = {
 
 // DATASET: cakes from ./datasets/cakes
 const cakePrompts = {
+  // Return an array of objects that include just the flavor of the cake and how
+  // much of that cake is in stock e.g.
+  // [
+  //    { flavor: 'dark chocolate', inStock: 15 },
+  //    { flavor: 'yellow', inStock: 14 },
+  //    ..etc
+  // ]
+
   stockPerCake() {
-    // Return an array of objects that include just the flavor of the cake and how
-    // much of that cake is in stock e.g.
-    // [
-    //    { flavor: 'dark chocolate', inStock: 15 },
-    //    { flavor: 'yellow', inStock: 14 },
-    //    ..etc
-    // ]
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
-
-    // Annotation:
-    // Write your annotation here as a comment
+    newCakes = [];
+    cakes.forEach(cake => {
+      let simpleCake = {};
+      simpleCake.flavor = cake.cakeFlavor;
+      simpleCake.inStock = cake.inStock;
+      newCakes.push(simpleCake);
+    });
+    return newCakes;
   },
+
+  // Annotation:
+  // Similar to mod prompt, use forEach to go through each cake and create a new object using only two of the properties from cakes. Push new object to an array.
 
   onlyInStock() {
     // Return an array of only the cakes that are in stock
@@ -217,35 +220,48 @@ const cakePrompts = {
     // ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let cakesInStock = cakes.filter(cake => {
+      return cake.inStock > 0;
+    });
 
-    // Annotation:
-    // Write your annotation here as a comment
+    return cakesInStock;
   },
+
+  // Annotation:
+  // Use filter to return ALL cakes that have more than 0 cakes in stock
 
   totalInventory() {
     // Return the total amount of cakes in stock e.g.
     // 59
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let totalCakes = cakes.reduce((acc, cake) => {
+      acc += cake.inStock;
+      return acc;
+    }, 0);
 
-    // Annotation:
-    // Write your annotation here as a comment
+    return totalCakes;
   },
+  // Annotation:
+  // Use reduce to create a single sum of all the individual instock numbers
 
   allToppings() {
     // Return an array of all unique toppings (no duplicates) needed to bake
     // every cake in the dataset e.g.
     // ['dutch process cocoa', 'toasted sugar', 'smoked sea salt', 'berries', ..etc]
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
-
-    // Annotation:
-    // Write your annotation here as a comment
+    let totalToppings = cakes.reduce((acc, cake) => {
+      cake.toppings.forEach(topping => {
+        if (acc.indexOf(topping) > -1) {
+          return;
+        } else {
+          acc.push(topping);
+        }
+      });
+      return acc;
+    }, []);
+    return totalToppings;
   },
+  // Annotation:
+  // Use a combo of forEach and reduce. forEach will go through each cakes'toppings and see if each topping is already in the acc's array. If it is not in the array yet, it will get pushed in. Return the acc array
 
   groceryList() {
     // I need to make a grocery list. Please give me an object where the keys are
@@ -258,12 +274,21 @@ const cakePrompts = {
     //    ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
-
-    // Annotation:
-    // Write your annotation here as a comment
+    let list = cakes.reduce((acc, cake) => {
+      cake.toppings.forEach(topping => {
+        if (acc[topping]) {
+          acc[topping]++;
+        } else {
+          acc[topping] = 1;
+        }
+      });
+      return acc;
+    }, {});
+    return list;
   }
+
+  // Annotation:
+  // Similar to allToppings except in stead of setting acc to an array, set to object. Then use forEach to go through each topping. If the acc object already has a key for that topping, increment the value by 1, other wise create a new key and set the value to 1.
 };
 
 
