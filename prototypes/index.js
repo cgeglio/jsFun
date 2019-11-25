@@ -318,11 +318,13 @@ const classPrompts = {
     //   { roomLetter: 'G', program: 'FE', capacity: 29 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let frontend = classrooms.filter(classroom => {
+      return classroom.program === 'FE';
+    });
 
+    return frontend;
     // Annotation:
-    // Write your annotation here as a comment
+    // Use filter to return ALL fe classrooms;
   },
 
   totalCapacities() {
@@ -332,22 +334,32 @@ const classPrompts = {
     //   feCapacity: 110,
     //   beCapacity: 96
     // }
+    let fe = 0;
+    let be = 0;
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    classrooms.forEach(classroom => {
+      classroom.program === 'FE' ? fe += classroom.capacity : be += classroom.capacity;
+    });
 
+    let total = {};
+    total.feCapacity = fe;
+    total.beCapacity = be;
+
+    return total;
     // Annotation:
-    // Write your annotation here as a comment
+    // Use forEach to go through each classroom. If the classroom is FE, add the classroom's capcity to the fe count. Otherwise, add it to the be count. Then create a object that has keys for each program's capacity set to the program's count
   },
 
   sortByCapacity() {
     // Return the array of classrooms sorted by their capacity (least capacity to greatest)
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let classCapacity = classrooms.sort((a, b) => {
+      return a.capacity - b.capacity;
+    });
 
+    return classCapacity;
     // Annotation:
-    // Write your annotation here as a comment
+    // Use sort to return the classrooms in ascending order based on capacity
   }
 };
 
