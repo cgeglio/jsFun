@@ -382,12 +382,18 @@ const nationalParksPrompts = {
     //   parksToVisit: ["Yellowstone", "Glacier", "Everglades"],
     //   parksVisited: ["Rocky Mountain", "Acadia", "Zion"]
     //}
+    let trackParks = {
+      parksVisited: [],
+      parksToVisit: []
+    };
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    nationalParks.forEach(park => {
+      park.visited ? trackParks.parksVisited.push(park.name) : trackParks.parksToVisit.push(park.name);
+    });
 
+    return trackParks;
     // Annotation:
-    // Write your annotation here as a comment
+    //Create an object that has keys for visited and not visited set to empty array. Use forEach to go through each park. If the park has been visited, push to visited array. Otherwise push to not visited array. Return object.
   },
 
   getParkInEachState() {
@@ -398,13 +404,15 @@ const nationalParksPrompts = {
     // { Maine: 'Acadia' },
     // { Utah: 'Zion' },
     // { Florida: 'Everglades' } ]
+    let parksByState = [];
 
+    nationalParks.forEach(park => {
+      parksByState.push({[park.location]: park.name});
+    });
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
-
+    return parksByState;
     // Annotation:
-    // Write your annotation here as a comment
+    // Create new array to hold state info. Use forEach to go through each park and create a new object using the location as the key and park name as the value. Push this new object into the array.
   },
 
   getParkActivities() {
@@ -423,12 +431,20 @@ const nationalParksPrompts = {
     //   'backpacking',
     //   'rock climbing' ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
-
-    // Annotation:
-    // Write your annotation here as a comment
-  }
+    let allActivities = nationalParks.reduce((acc, park) => {
+      park.activities.forEach(activity => {
+        if (acc.indexOf(activity) > -1) {
+          return;
+        } else {
+          acc.push(activity);
+        }
+      });
+      return acc;
+    }, []);
+    return allActivities;
+  },
+  // Annotation:
+  // Use a combo of reduce and forEach. Use forEach to go through the activities for each park. Use reduce and set the acc to an empty array. If the acc already includes the activity, look at thre next activity. If the acc does not include the activity, push the activity to the array. 
 };
 
 
