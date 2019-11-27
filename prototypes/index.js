@@ -444,7 +444,7 @@ const nationalParksPrompts = {
     return allActivities;
   },
   // Annotation:
-  // Use a combo of reduce and forEach. Use forEach to go through the activities for each park. Use reduce and set the acc to an empty array. If the acc already includes the activity, look at thre next activity. If the acc does not include the activity, push the activity to the array. 
+  // Use a combo of reduce and forEach. Use forEach to go through the activities for each park. Use reduce and set the acc to an empty array. If the acc already includes the activity, look at thre next activity. If the acc does not include the activity, push the activity to the array.
 };
 
 
@@ -465,12 +465,15 @@ const breweryPrompts = {
   getBeerCount() {
     // Return the total beer count of all beers for every brewery e.g.
     // 40
+    let totalBeers = breweries.reduce((acc, brewery) => {
+      acc += brewery.beers.length;
+      return acc;
+    }, 0);
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    return totalBeers;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Use reduce to count the length of the beers array for each brewery and add the number of beers to the acc.
   },
 
   getBreweryBeerCount() {
@@ -481,24 +484,41 @@ const breweryPrompts = {
     //  { name: 'Ratio Beerworks', beerCount: 5},
     // ...etc.
     // ]
+    breweryBeerCount = [];
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    breweries.forEach(brewery => {
+      let beerTotal = {};
+      beerTotal.name = brewery.name;
+      beerTotal.beerCount = brewery.beers.length;
+      breweryBeerCount.push(beerTotal);
+    });
 
+    return breweryBeerCount ;
     // Annotation:
-    // Write your annotation here as a comment
+    // Use forEach to go through each brewery and create a new object consiting of the brewery's name and the number of beers in the brewery's beer array. Push each object to a new array.
   },
+
 
   findHighestAbvBeer() {
     // Return the beer which has the highest ABV of all beers
     // e.g.
     // { name: 'Barrel Aged Nature\'s Sweater', type: 'Barley Wine', abv: 10.9, ibu: 40 }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let highestABV = [];
 
+    breweries.forEach(brewery => {
+      brewery.beers.sort((a, b) => {
+        return b.abv - a.abv;
+      });
+      highestABV.push(brewery.beers[0]);
+      highestABV.sort((a, b) => {
+        return b.abv - a.abv;
+      });
+    });
+
+    return highestABV[0];
     // Annotation:
-    // Write your annotation here as a comment
+    // Use a combo of forEach and sort. Use for each to go through each brewery and then sort its beers array from highest abv to lowest abv. Push the highest abv beer (index 0) into a newly created array. Sort the new array from highest to lowest and then return the highest abv beer from there (again, index 0)
   }
 };
 
@@ -542,11 +562,23 @@ const turingPrompts = {
     //  { name: 'Robbie', studentCount: 18 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let allTeachers = [];
 
+    instructors.forEach(instructor => {
+      var mod = cohorts.find(cohort => {
+        return cohort.module === instructor.module;
+      });
+
+      let instructorInfo = {};
+
+      instructorInfo.name = instructor.name;
+      instructorInfo.studentCount = mod.studentCount;
+      allTeachers.push(instructorInfo);
+    });
+
+    return allTeachers;
     // Annotation:
-    // Write your annotation here as a comment
+    // Use a combo of forEach and find. Use forEach to go through each instructor and create an object using the instructors name and student count. Get the student count by using find to go through cohorts and grab the object with the module matches the instructor's module.
   },
 
   studentsPerInstructor() {
@@ -556,11 +588,19 @@ const turingPrompts = {
     // cohort1804: 10.5
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let ratio = {};
 
+    cohorts.forEach(cohort => {
+      let teacherCount = instructors.filter(instructor => {
+        return instructor.module === cohort.module;
+      });
+
+      ratio['cohort' + `${cohort.cohort}`] = cohort.studentCount / teacherCount.length;
+    });
+
+    return ratio;
     // Annotation:
-    // Write your annotation here as a comment
+    // Use a combo of forEach and filter. Create a new object called ratio. Use forEach to go through each cohort and set the cohort name as a key in ratio object. Filter teachers by the module they teach. Use the length of the teacher filter array to calculate the number of teachers per cohort students. Set this number as the value for the cohort name and return the ratio object.
   },
 
   modulesPerTeacher() {
@@ -577,12 +617,29 @@ const turingPrompts = {
     //     Christie: [1, 2, 3, 4],
     //     Will: [1, 2, 3, 4]
     //   }
+    let teacherSkills = {};
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    instructors.forEach(instructor => {
+      let skillset = [];
+      instructor.teaches.forEach(subject => {
+        let skills = cohorts.filter(cohort => {
+          return cohort.curriculum.includes(subject);
+        });
+        skills.forEach(skill => {
+          if (skillset.indexOf(skill.module) === -1) {
+            skillset.push(skill.module);
+          }
+        });
+        skillset.sort((a, b) => {
+          return a - b;
+        });
+      });
+      teacherSkills[instructor.name] = skillset;
+    });
 
+    return teacherSkills;
     // Annotation:
-    // Write your annotation here as a comment
+    // Curious if there is a more efficient way of doing this. I used a combo of forEach and filter. First I use forEach to go through each teacher. Within each teacher, I use forEach again to go through each subject they teach. Using filter, I check to see which cohort curriculum items match the subject. Using indexOf, I make sure that no duplicate module numbers are pushed into my skills array. Then, I sort the skills array from lowest to highest. Finally, I set a key of the teacher's name with a value of the teacher's skills array in my teacherSkills object.
   },
 
   curriculumPerTeacher() {
@@ -595,17 +652,28 @@ const turingPrompts = {
     //   recursion: [ 'Pam', 'Leta' ]
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let subjects = {};
 
+    cohorts.forEach(cohort => {
+      cohort.curriculum.forEach(topic => {
+        let topicTeachers = [];
+        let topicInfo = instructors.filter(instructor => {
+          return instructor.teaches.includes(topic);
+        });
+        topicInfo.forEach(info => {
+          if (topicTeachers.indexOf(info.name) === -1) {
+            topicTeachers.push(info.name);
+          }
+        });
+        subjects[topic] = topicTeachers;
+      });
+    });
+
+    return subjects;
     // Annotation:
-    // Write your annotation here as a comment
+    // Similar to the modulesPerTeacher, use a combo of forEach and filter to go through each cohorts array of topics. Make each unique topic a key in a newly created subjects object. Set the key's value to the teacher's names that have that topic in their teaches array using filter.
   }
 };
-
-
-
-
 
 
 // ---------------------------------------------------------------------------
