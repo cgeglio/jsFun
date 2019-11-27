@@ -697,13 +697,30 @@ const bossPrompts = {
     //   { bossName: 'Ursula', sidekickLoyalty: 20 },
     //   { bossName: 'Scar', sidekickLoyalty: 16 }
     // ]
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
-
-    // Annotation:
-    // Write your annotation here as a comment
+    let sidekickInfo = [];
+    let bossList = Object.keys(bosses);
+    bossList.forEach(boss => {
+      let loyalty = {};
+      loyalty.bossName = bosses[boss].name;
+      let x = [];
+      bosses[boss].sidekicks.forEach(sidekick => {
+        sidekicks.forEach(kick => {
+          if (kick.name === sidekick.name) {
+            x.push(kick.loyaltyToBoss);
+          }
+        });
+        sum = x.reduce((acc, num) => {
+          acc += num;
+          return acc;
+        }, 0);
+        loyalty.sidekickLoyalty = sum;
+      });
+      sidekickInfo.push(loyalty);
+    });
+    return sidekickInfo;
   }
+  // Annotation:
+  // Again, curious if there is a cleaner way to do this. I used a combo of forEach and reduce. First I got the keys for bosses. I used forEach to go through each of those keys, and a nested forEach to go through the sidekicks of each boss. If the sidekicks object contained an object with the same name as the boss's sidekick, I pushed the sidekick's loyalty to boss points to an array. I reduced the array into a single number.
 };
 
 
