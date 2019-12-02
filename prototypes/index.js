@@ -922,11 +922,17 @@ const dinosaurPrompts = {
     //   'Jurassic World: Fallen Kingdom': 18
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let movieDinos = movies.reduce((acc, movie) => {
+      let awesomeDinos = movie.dinos.filter(dino => {
+        return dinosaurs[dino].isAwesome;
+      });
+      acc[movie.title] = awesomeDinos.length;
+      return acc;
+    }, {});
 
+    return movieDinos;
     // Annotation:
-    // Write your annotation here as a comment
+    // Use reduce and filter. Use reduce to bring all the movies down into a single object. Use filter to only return dinos if their isAwesome property is true.
   },
 
   averageAgePerMovie() {
@@ -955,11 +961,25 @@ const dinosaurPrompts = {
       }
     */
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let movieInfo = movies.reduce((acc, movie) => {
+      let movieDeets = {};
+      let directorFilms = movies.filter(film => {
+        return movie.director === film.director;
+      });
+      directorFilms.forEach(film => {
+        let averageAge = 0;
+        film.cast.forEach(actor => {
+          averageAge += (film.yearReleased - humans[actor].yearBorn);
+        });
+        movieDeets[film.title] = Math.floor(averageAge/film.cast.length);
+      });
+      acc[movie.director] = movieDeets;
+      return acc;
+    }, {});
 
+    return movieInfo;
     // Annotation:
-    // Write your annotation here as a comment
+    // Use a combo of filter forEach and reduce. Use reduce to get the movies array down to a single object. Filter the films by director. For each film with that director, calculate the average age of the actors in the cast array. Use the director's name as the acc key and the movie titles and average age as the value.
   },
 
   uncastActors() {
@@ -988,11 +1008,42 @@ const dinosaurPrompts = {
       }]
     */
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
 
+    let humanNames = Object.keys(humans);
+    let allActors = [];
+    movies.forEach(movie => {
+      movie.cast.forEach(actor => {
+        if (allActors.indexOf(actor) === -1) {
+          allActors.push(actor);
+        }
+      });
+    });
+    let notUsed = humanNames.filter(name => {
+      if(allActors.indexOf(name) === -1) {
+        return humans[name];
+      }
+    });
+    let notUsedInfo = [];
+    notUsed.forEach(name => {
+      let actor = {};
+      actor.name = name;
+      actor.nationality = humans[name].nationality;
+      actor.imdbStarMeterRating = humans[name].imdbStarMeterRating;
+      notUsedInfo.push(actor);
+    });
+
+    notUsedInfo.sort((a, b) => {
+      let nationalityA = a.nationality.toLowerCase();
+      let nationalityB = b.nationality.toLowerCase();
+      if (nationalityA < nationalityB) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+    return notUsedInfo;
     // Annotation:
-    // Write your annotation here as a comment
+    //Used several nested forEachs and filter. First went through and made an array of every actors name that appears in the film. I compared this array to the humans objects and pushed the difference into a new array for unused actors. Created an object with information from the humans objects for each unused actor and pushed into another new array. Finally, sorted the unused actor info by nationality.
   },
 
   actorsAgesInMovies() {
@@ -1010,12 +1061,37 @@ const dinosaurPrompts = {
       { name: 'Chris Pratt', ages: [ 36, 39 ] },
       { name: 'Bryce Dallas Howard', ages: [ 34, 37 ] } ]
     */
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
-
+    let allNames = Object.keys(humans);
+    let actorAges = [];
+    let everyActor = [];
+    movies.forEach(movie => {
+      movie.cast.forEach(actor => {
+        if (everyActor.indexOf(actor) === -1) {
+          everyActor.push(actor);
+        }
+      });
+    });
+    let castActors = allNames.filter(name => {
+      if(everyActor.indexOf(name) > -1) {
+        return name;
+      }
+    });
+    castActors.forEach(guy => {
+      let actorInfo = {};
+      actorInfo.name = guy;
+      let findAges = [];
+      movies.filter(movie => {
+        if (movie.cast.includes(guy)) {
+          let age = movie.yearReleased - humans[guy].yearBorn;
+          findAges.push(age);
+        }
+      });
+      actorInfo.ages = findAges;
+      actorAges.push(actorInfo);
+    });
+    return actorAges;
     // Annotation:
-    // Write your annotation here as a comment
+    // Similar to the previous problem, use nested forEachs and filter to go through and find all of the actors. This time, instead of filtering the unsed actors, filter the actors that were cast. Next, filter the movies that had each cast actor. Use the actor's birth year and the movie's release year to calculate the actors age in each film. Use this information to create a new object for each actor and push into an array.
   }
 };
 
