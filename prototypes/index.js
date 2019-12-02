@@ -815,12 +815,23 @@ const astronomyPrompts = {
     //    "Orion",
     //    "The Little Dipper" ]
 
+    let allStars = [];
+    stars.sort((a, b) => {
+      return a.visualMagnitude - b.visualMagnitude;
+    });
+    stars.forEach(star => {
+      if (allStars.includes(star.constellation)) {
+        let i = allStars.indexOf(star.constellation);
+        allStars.splice(i, 1);
+        allStars.push(star.constellation);
+      } else {
+        allStars.push(star.constellation);
+      }
+    });
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
-
+    return allStars;
     // Annotation:
-    // Write your annotation here as a comment
+    // **Added a constellation name to one of the stars because Johnny said he confirmed the test off** Start off by sorting the stars from lowest to highest visibility. Then use forEach to go through each star. If the constellation that star is a part of is alrady in the array, get rid of the first occurrence of that constellation with splice and then push the constellation so that the constellations remain in order without duplicates.
   }
 };
 
