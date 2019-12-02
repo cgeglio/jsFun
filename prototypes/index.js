@@ -756,13 +756,23 @@ const astronomyPrompts = {
     //     lightYearsFromEarth: 640,
     //     color: 'red' }
     // ]
+    let allConstellations = Object.keys(constellations);
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
-
-    // Annotation:
-    // Write your annotation here as a comment
+    let totalStars = allConstellations.reduce((acc, constellation) => {
+      constellations[constellation].stars.forEach(star => {
+        stars.filter(starry => {
+          if (starry.name === star) {
+            acc.unshift(starry);
+          }
+        });
+      });
+      return acc;
+    }, []);
+    return totalStars;
   },
+  // Annotation:
+  // Use reduce, forEach, and filter. First get the constellation keys and then use reduce on the keys with an acc set to []. Use for each to go through each of the constellations stars and filter out the star objects that match the name of the constellation's star. Use unshift to get the stars into the acc array in the correct order.
+
 
   starsByColor() {
     // Return an object with keys of the different colors of the stars,
@@ -775,12 +785,21 @@ const astronomyPrompts = {
     //   red: [{obj}]
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
-
-    // Annotation:
-    // Write your annotation here as a comment
+    let allColors = {};
+    stars.forEach(star => {
+      let colorInfo = stars.filter(starry => {
+        return starry.color === star.color;
+      });
+      if (allColors[star.color]) {
+        return;
+      } else {
+        allColors[star.color] = colorInfo;
+      }
+    });
+    return allColors;
   },
+  // Annotation:
+  // Use forEach and filter. Use forEach to go through each star. If the acc has a key of that color, return. Otherwise create a key of the color and use filter to find all of the other stars that have that color.
 
   constellationsStarsExistIn() {
     // Return an array of the names of the constellations that the brightest stars are part of e.g.
