@@ -843,15 +843,19 @@ const astronomyPrompts = {
 // DATASET: charaters, weapons from ./datasets/ultima
 const ultimaPrompts = {
   totalDamage() {
-
     // Return the sum of the amount of damage for all the weapons that our characters can use
     // Answer => 113
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
-
+    let characterWeapons = Object.keys(weapons);
+    let totalDamagePossible = 0;
+    characterWeapons.forEach(weapon => {
+      let count = characters.filter(character => {
+        return character.weapons.includes(weapon);
+      });
+      totalDamagePossible += weapons[weapon].damage * count.length;
+    });
+    return totalDamagePossible;
     // Annotation:
-    // Write your annotation here as a comment
+    // Use forEach and filter. Find the keys of the weapons object and use those to go through the weapons. Find each weapon in the characters objects and keep track of how often they appear. Find total damage possible by multiplying the damage score for each weapon by the number of times it appears.
   },
 
   charactersByTotal() {
@@ -859,11 +863,22 @@ const ultimaPrompts = {
     // Return the sum damage and total range for each character as an object.
     // ex: [ { Avatar: { damage: 27, range: 24 }, { Iolo: {...}, ...}
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
-
+    let weaponInfo = characters.reduce((acc, character) => {
+      let characterWeapons = {};
+      let totalWeapons = {damage: 0, range: 0};
+      character.weapons.forEach(weapon => {
+        if (weapons[weapon]) {
+          totalWeapons.damage += weapons[weapon].damage;
+          totalWeapons.range += weapons[weapon].range;
+        }
+      });
+      characterWeapons[character.name] = totalWeapons;
+      acc.push(characterWeapons);
+      return acc;
+    }, []);
+    return weaponInfo;
     // Annotation:
-    // Write your annotation here as a comment
+    // Use reduce and forEach. Use reduce to reduce the character information into a single array. Use forEach to go through each of the character weaponds and find it in the weapons object. Create a new object for each character with a total count of its damage and range for all the weapons in its posession.
   },
 };
 
